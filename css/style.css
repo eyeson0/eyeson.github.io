@@ -138,6 +138,157 @@ body{
 .footer-inner{max-width:var(--max-width);margin:0 auto;display:flex;gap:32px;flex-wrap:wrap;justify-content:space-between}
 .footer-col{min-width:180px}
 .brand-compact{font-weight:700;font-size:18px;margin-bottom:8px}
+/* =========================
+   LIGHT THEME OVERRIDES
+   Paste at the end of style.css
+   ========================= */
+
+/* Global background & text */
+:root {
+  --page-bg: #ffffff;
+  --text-color: #111111;
+  --muted-color: #666f76;
+  --card-bg: #ffffff;
+  --surface: #fafafa;
+  --glass-light: rgba(255,255,255,0.72);
+  --glass-border-light: rgba(0,0,0,0.06);
+  --shadow-light: 0 12px 30px rgba(0,0,0,0.06);
+  --link-color: #0b0b0b;
+  --link-hover: rgba(11,11,11,0.06);
+}
+
+/* Page base */
+body {
+  background: var(--page-bg) !important;
+  color: var(--text-color) !important;
+}
+
+/* Override backgrounds in major containers */
+.site-header {
+  background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(255,255,255,0.82)) !important;
+  backdrop-filter: blur(8px) saturate(120%);
+  border-bottom: 1px solid var(--glass-border-light) !important;
+  transition: box-shadow 300ms ease, background 300ms ease;
+  color: var(--text-color);
+}
+.site-header.scrolled {
+  box-shadow: var(--shadow-light) !important;
+}
+
+/* Logo: if your logo is white, add .site-logo--dark to the <img> to invert it into a dark mark */
+.site-logo { filter: none; }
+.site-logo.site-logo--dark {
+  filter: invert(1) brightness(0) saturate(0) contrast(1);
+  /* This tries to make a white logo readable on white; for best results use a dark logo file instead */
+}
+
+/* Nav items */
+.nav a, .nav button {
+  color: var(--link-color) !important;
+  text-shadow: none !important;
+}
+.nav a::after, .nav button::after {
+  background: linear-gradient(90deg, rgba(11,11,11,0.95), rgba(11,11,11,0.7)) !important;
+}
+.nav a:hover, .nav button:hover {
+  color: var(--link-color) !important;
+  text-shadow: 0 6px 18px rgba(0,0,0,0.04);
+}
+
+/* Dropdowns: dark -> light adjustments */
+.dropdown {
+  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.98)) !important;
+  border: 1px solid var(--glass-border-light) !important;
+  box-shadow: 0 10px 30px rgba(11,11,11,0.06) !important;
+  color: var(--text-color) !important;
+}
+.dropdown a { color: var(--text-color) !important; }
+.dropdown a:hover { background: var(--link-hover); color: var(--text-color) !important; }
+
+/* Hero */
+.hero, .hero-bg, .bg-slide {
+  background-color: var(--page-bg) !important;
+}
+.hero::after{ /* softer overlay on bright background */
+  content:""; position:absolute; inset:0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.06));
+  z-index:1;
+}
+
+/* Buttons: invert to dark text on white bg where appropriate */
+.btn {
+  border-color: rgba(0,0,0,0.08) !important;
+  color: var(--text-color) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+.btn.primary {
+  background: var(--text-color) !important;
+  color: var(--page-bg) !important;
+  border: 0;
+}
+
+/* Product cards: lighter surface */
+.product-card, .bs-card, .modal-inner {
+  background: var(--card-bg) !important;
+  border: 1px solid rgba(0,0,0,0.04) !important;
+  box-shadow: var(--shadow-light) !important;
+  color: var(--text-color) !important;
+}
+
+/* Images remain same (no change) */
+
+/* Footer: invert */
+.site-footer {
+  background: var(--page-bg) !important;
+  color: var(--text-color) !important;
+  border-top: 1px solid var(--glass-border-light);
+}
+.site-footer .socials a {
+  border-color: rgba(0,0,0,0.05) !important;
+  color: var(--text-color) !important;
+}
+.site-footer .muted { color: var(--muted-color); }
+
+/* Inputs & forms */
+input, textarea, select {
+  background: var(--surface) !important;
+  color: var(--text-color) !important;
+  border: 1px solid rgba(0,0,0,0.06) !important;
+}
+input::placeholder, textarea::placeholder { color: var(--muted-color) !important; }
+
+/* Links */
+a { color: #0a59a6; } /* subtle brand link color */
+a:hover { color: #083e77; text-decoration: underline; }
+
+/* Scroll indicator contrast */
+.scroll-indicator span { border-color: rgba(0,0,0,0.12) !important; }
+.scroll-indicator span::after { background: rgba(0,0,0,0.6) !important; }
+
+/* Mobile menu overlay: keep slightly translucent white */
+.mobile-menu {
+  background: rgba(255,255,255,0.96) !important;
+  color: var(--text-color) !important;
+}
+
+/* Modal overlay: keep dim overlay for readability */
+.modal { background: rgba(0,0,0,0.45) !important; } /* dark overlay for modal readability */
+
+/* Minor components corrections */
+.brand-compact, .muted { color: var(--text-color) !important; }
+.product-name, .price { color: var(--text-color) !important; }
+
+/* Accessibility: ensure focus states are visible on light bg */
+a:focus, button:focus, input:focus {
+  outline: 2px solid rgba(0,0,0,0.08);
+  outline-offset: 3px;
+}
+
+/* Preserve logo center behavior (if you added nav grid override earlier, keep it) */
+/* No changes to layout rules here — only color/theme overrides */
+
+/* End of light theme overrides */
 
 /* Utilities */
 .hidden{display:none}
