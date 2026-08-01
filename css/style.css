@@ -28,15 +28,66 @@ body{
   overflow-x:hidden;
 }
 
-/* Loader & cursor placeholders */
-#pageLoader.loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(0,0,0,0.85),rgba(0,0,0,0.95));z-index:9999}
-.brand-mark{width:56px;height:56px;border-radius:12px;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:28px}
-.loading-line{width:220px;height:4px;background:linear-gradient(90deg,#fff0,#fff,#fff0);border-radius:999px;animation:loaderBar 1.6s infinite}
-@keyframes loaderBar{0%{transform:translateX(-60%)}50%{transform:translateX(0)}100%{transform:translateX(60%)}}
+/* PAGE LOADER — force perfect centering and highest priority
+   Paste this at the end of css/style.css (or replace the existing #pageLoader rules) */
+#pageLoader.loader,
+#pageLoader {
+  position: fixed !important;
+  inset: 0 !important;                 /* top:0; right:0; bottom:0; left:0; */
+  display: flex !important;
+  align-items: center !important;      /* vertical centering */
+  justify-content: center !important;  /* horizontal centering */
+  z-index: 99999 !important;
+  pointer-events: all !important;
+  background: linear-gradient(180deg, rgba(0,0,0,0.85), rgba(0,0,0,0.95));
+}
 
-/* Cursor */
-#cursor{position:fixed;top:0;left:0;width:16px;height:16px;border-radius:50%;background:transparent;border:1px solid rgba(255,255,255,0.18);pointer-events:none;transform:translate(-50%,-50%);transition:transform 120ms ease, width 220ms ease, height 220ms ease, background 220ms ease;z-index:9998;mix-blend-mode:screen}
+/* Ensure the inner loader content is centered and fills viewport */
+#pageLoader .loader-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 100vh;    /* ensures vertical centering in any viewport */
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
 
+/* small visual tweaks so the mark and line stay centered */
+#pageLoader .brand-mark {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 28px;
+  background: #ffffff;
+  color: #000000;
+}
+
+#pageLoader .loading-line {
+  width: 220px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0) 100%);
+  animation: loaderBar 1.6s infinite;
+}
+
+/* Mobile safe: keep loader content centered even with small screens */
+@media (max-height: 420px) {
+  #pageLoader .loader-inner { min-height: 60vh; padding-top: 8vh; padding-bottom: 8vh; }
+}
+
+/* Keyframes (if not already present) */
+@keyframes loaderBar {
+  0%   { transform: translateX(-60%); }
+  50%  { transform: translateX(0%); }
+  100% { transform: translateX(60%); }
+}
 /* Header */
 .site-header{
   position:fixed;left:0;right:0;top:0;height:72px;display:flex;align-items:center;justify-content:center;z-index:999;backdrop-filter: blur(8px) saturate(120%);
