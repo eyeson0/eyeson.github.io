@@ -101,14 +101,49 @@ body{
 .logo-wrap{position:absolute;left:50%;transform:translateX(-50%);pointer-events:auto}
 .logo{display:block;height:36px}
 
-/* Dropdown */
-.has-dropdown{position:relative}
-.dropdown{position:absolute;top:46px;left:0;min-width:220px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));backdrop-filter:blur(6px);border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,0.04);opacity:0;transform:translateY(6px);pointer-events:none;transition:opacity var(--transition), transform var(--transition);box-shadow:var(--shadow)}
-.has-dropdown:hover > .dropdown{opacity:1;transform:translateY(0);pointer-events:auto}
-.dropdown ul{display:flex;flex-direction:column;gap:6px}
-.dropdown a{color:var(--accent);font-weight:500;padding:8px;border-radius:6px}
-.dropdown a:hover{background:rgba(255,255,255,0.02)}
+/* Dropdown: keep interactive, avoid disappearing while pointer moves */
+.has-dropdown { position: relative; z-index: 2000; }
 
+/* Base dropdown hidden state (unchanged) */
+.dropdown {
+  position: absolute;
+  top: 46px;       /* adjust to match your header height */
+  left: 0;
+  min-width: 220px;
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;           /* prevents accidental hover */
+  transition: opacity 220ms ease, transform 220ms ease;
+  will-change: opacity, transform;
+  box-shadow: var(--shadow);
+}
+
+/* Show on hover (existing) */
+.has-dropdown:hover > .dropdown,
+.has-dropdown:focus-within > .dropdown {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Explicit "open" class for JS to control visibility reliably */
+.has-dropdown.open > .dropdown {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Ensure dropdown sits above other elements */
+.dropdown { z-index: 2100; }
+
+/* Slight padding to remove micro-gap between trigger and dropdown */
+.has-dropdown > .dropdown { margin-top: 2px; }
+
+/* Ensure clickable links inside dropdown don't close because of pointer gaps */
+.dropdown a { display: block; padding: 8px 10px; cursor: pointer; }
+
+/* Optional: keep focus outlines for keyboard users */
+.has-dropdown a:focus, .dropdown a:focus { outline: 2px solid rgba(255,255,255,0.08); outline-offset: 2px; }
 /* Layout containers */
 .section{padding:72px 20px;max-width:var(--max-width);margin:0 auto}
 .section-header{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:24px}
