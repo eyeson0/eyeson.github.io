@@ -16,13 +16,76 @@ document.addEventListener('DOMContentLoaded', () => {
     // fallback.style.display = 'block';
   }
 });
-  document.querySelectorAll('.has-dropdown').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      const dd = el.querySelector('.dropdown'); if (dd) dd.style.opacity = '1';
+ // Dropdown helper: prevents dropdown from disappearing when pointer moves between trigger and panel
+(function initPersistentDropdowns() {
+  const DROPDOWN_CLOSE_DELAY = 220; // ms
+  const dropdownParents = Array.from(document.querySelectorAll('.has-dropdown'));
+  let closeTimers = new WeakMap();
+
+  dropdownParents.forEach(parent => {
+    const panel = parent.querySelector('.dropdown');
+
+    if (!panel) return;
+
+    // Clear any pending close timer
+    const clearClose = () => {
+      const t = closeTimers.get(parent);
+      if (t) { clearTimeout(t); closeTimers.delete(parent); }
+    };
+
+    // Open immediately
+    const open = () => {
+      clearClose();
+      parent.classList.add('open');
+      parent.setAttribute('aria-expanded', 'true');
+      if (panel) panel.style.pointerEvents = 'auto';
+    };
+
+    // Close with a small delay to avoid micro-gaps
+    const close = () => {
+      clearClose();
+      const t = setTimeout(() => {
+        parent.classList.remove('open');
+        parent.setAttribute('aria-expanded', 'false');
+        if (panel) panel.style.pointerEvents = 'none';
+        closeTimers.delete(parent);
+      }, DROPDOWN_CLOSE_DELAY);
+      closeTimers.set(parent, t);
+    };
+
+    // Mouse interactions (desktop)
+    parent.addEventListener('mouseenter', open);
+    parent.addEventListener('mouseleave', close);
+
+    // Keep open when pointer enters the panel
+    panel.addEventListener('mouseenter', open);
+    panel.addEventListener('mouseleave', close);
+
+    // Keyboard: open on focus, close on blur
+    parent.addEventListener('focusin', open);
+    parent.addEventListener('focusout', (ev) => {
+      // if focus moved outside the parent entirely, close
+      if (!parent.contains(ev.relatedTarget)) close();
     });
-    el.addEventListener('mouseleave', () => {
-      const dd = el.querySelector('.dropdown'); if (dd) dd.style.opacity = '';
-    });
+
+    // Touch: first tap opens, second tap follows link (toggle behavior)
+    // This prevents the dropdown from closing the moment user tries to tap an item.
+    parent.addEventListener('touchstart', function (e) {
+      // If panel is already open, do nothing: let the tap go through.
+      if (parent.classList.contains('open')) return;
+      // If target is the trigger itself (not the child link), open and prevent default follow.
+      // This lets the user tap again to activate a link inside.
+      e.preventDefault();
+      open();
+    }, { passive: false });
+  });
+
+  // Close any open dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('.has-dropdown')) return;
+    dropdownParents.forEach(parent => parent.classList.remove('open'));
+  });
+})();
   });
 
   // Custom cursor
