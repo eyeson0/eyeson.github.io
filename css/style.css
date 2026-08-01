@@ -155,3 +155,134 @@ body{
 .hidden{display:none}
 @media (max-width:1000px){ .products-grid{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:720px){ .products-grid{grid-template-columns:1fr} .logo-wrap{position:fixed;top:12px;left:50%;transform:translateX(-50%)} .site-header{height:64px} }
+/* ================================
+   NAVBAR LAYOUT FIX — Center Logo
+   - Reserves a fixed, responsive center column for the logo
+   - Uses CSS Grid for layout (no absolute positioning for menus)
+   - Left/right nav have padding so they never enter the center area
+   - Responsive breakpoints included
+   Paste this at the end of your style.css to override earlier rules.
+   ================================ */
+
+/* Responsive logo slot width: clamps between mobile/tablet/desktop sizes */
+:root {
+  --logo-slot: clamp(90px, 12vw, 140px); /* mobile 90px, up to 140px on large screens */
+  --nav-safe-gap: 24px;                  /* extra safe spacing from logo */
+}
+
+/* Ensure nav-inner uses three columns: left / logo / right */
+.nav-inner {
+  display: grid !important;
+  grid-template-columns: 1fr var(--logo-slot) 1fr; /* left, logo, right */
+  align-items: center;
+  column-gap: 12px;
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Center logo cell sits in the middle column and is always centered */
+.logo-cell {
+  grid-column: 2;           /* explicit center column */
+  justify-self: center;     /* center the logo inside the column */
+  align-self: center;
+  pointer-events: auto;
+}
+
+/* Logo image: keep fixed width according to the slot; prevents unexpected resize */
+.site-logo {
+  width: var(--logo-slot);
+  height: auto;
+  max-height: 64px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Left and right nav containers — DO NOT use absolute positioning */
+.nav-left,
+.nav-right {
+  grid-column: 1 / 2, 3 / 4; /* left uses first column; right uses third column */
+  min-width: 0;              /* allow flex children to shrink properly */
+  display: flex;
+  align-items: center;
+}
+
+/* Prevent the nav content from entering the center by adding internal padding.
+   The padding is half the logo slot + a safe gap to ensure items never collide */
+.nav-left {
+  padding-right: calc(var(--logo-slot) / 2 + var(--nav-safe-gap));
+  justify-content: flex-start;
+}
+
+.nav-right {
+  padding-left: calc(var(--logo-slot) / 2 + var(--nav-safe-gap));
+  justify-content: flex-end;
+}
+
+/* Nav list and items: flex row, no wrapping into the center slot */
+.nav ul {
+  display: flex;
+  gap: var(--gap-lg, 28px);
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  flex-wrap: nowrap;       /* keep items on one line (until responsive kicks in) */
+  overflow: hidden;        /* prevent visual overflow under extreme conditions */
+}
+
+.nav a, .nav button.nav-btn {
+  white-space: nowrap;     /* prevent wrapping into the center area */
+  display: inline-flex;
+  align-items: center;
+}
+
+/* If the menu would overflow the available space, allow graceful clipping — but do not move into center */
+.nav-left ul, .nav-right ul {
+  max-width: calc(50vw - (var(--logo-slot) / 2) - var(--nav-safe-gap));
+}
+
+/* Hover and focus remain as defined; ensure spacing is still visible */
+.nav ul > li { padding: 2px 6px; }
+
+/* Responsive behavior:
+   - At tablet sizes reduce logo slot slightly (controlled by clamp)
+   - At mobile hide the left/right nav and show hamburger (existing styles expected)
+*/
+@media (max-width: 1024px) {
+  /* Slightly smaller side paddings on medium screens */
+  .nav-inner { padding: 0 18px; column-gap: 10px; }
+  .nav-left { padding-right: calc(var(--logo-slot) / 2 + 18px); }
+  .nav-right { padding-left: calc(var(--logo-slot) / 2 + 18px); }
+
+  /* Make nav lists more compact */
+  .nav ul { gap: 20px; }
+}
+
+@media (max-width: 720px) {
+  /* On mobile we hide desktop navs and show the hamburger/menu overlay */
+  .nav-left, .nav-right { display: none; }
+
+  /* Keep the logo centered in the middle column. The grid remains so the logo won't shift. */
+  .nav-inner {
+    grid-template-columns: 1fr var(--logo-slot) 1fr;
+    padding: 0 12px;
+  }
+
+  /* Ensure logo is still centered and uses the mobile width */
+  :root { --logo-slot: 90px; } /* override for mobile */
+
+  /* Mobile nav / overlay will handle navigation (hamburger already in markup) */
+  .hamburger { display: block; }
+}
+
+/* Accessibility: when screen is small but nav items remain visible, allow horizontal scrolling
+   but not into the center column — this is more of a safeguard */
+.nav-left ul, .nav-right ul {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Optional debug helper (remove after verifying) */
+/* .nav-left.debug { outline: 1px dashed rgba(255,255,255,0.12); }
+   .logo-cell.debug { outline: 1px dashed rgba(255,0,0,0.12); } */
