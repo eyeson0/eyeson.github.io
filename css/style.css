@@ -50,13 +50,66 @@ body{
 .logo-wrap{position:absolute;left:50%;transform:translateX(-50%);pointer-events:auto}
 .logo{display:block;height:36px}
 
-/* Dropdown */
-.has-dropdown{position:relative}
-.dropdown{position:absolute;top:46px;left:0;min-width:220px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));backdrop-filter:blur(6px);border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,0.04);opacity:0;transform:translateY(6px);pointer-events:none;transition:opacity var(--transition), transform var(--transition);box-shadow:var(--shadow)}
-.has-dropdown:hover > .dropdown{opacity:1;transform:translateY(0);pointer-events:auto}
-.dropdown ul{display:flex;flex-direction:column;gap:6px}
-.dropdown a{color:var(--accent);font-weight:500;padding:8px;border-radius:6px}
-.dropdown a:hover{background:rgba(255,255,255,0.02)}
+/* PAGE LOADER — force perfect centering and highest priority
+   Paste this at the end of css/style.css (or replace the existing #pageLoader rules) */
+#pageLoader.loader,
+#pageLoader {
+  position: fixed !important;
+  inset: 0 !important;                 /* top:0; right:0; bottom:0; left:0; */
+  display: flex !important;
+  align-items: center !important;      /* vertical centering */
+  justify-content: center !important;  /* horizontal centering */
+  z-index: 99999 !important;
+  pointer-events: all !important;
+  background: linear-gradient(180deg, rgba(0,0,0,0.85), rgba(0,0,0,0.95));
+}
+
+/* Ensure the inner loader content is centered and fills viewport */
+#pageLoader .loader-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 100vh;    /* ensures vertical centering in any viewport */
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* small visual tweaks so the mark and line stay centered */
+#pageLoader .brand-mark {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 28px;
+  background: #ffffff;
+  color: #000000;
+}
+
+#pageLoader .loading-line {
+  width: 220px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0) 100%);
+  animation: loaderBar 1.6s infinite;
+}
+
+/* Mobile safe: keep loader content centered even with small screens */
+@media (max-height: 420px) {
+  #pageLoader .loader-inner { min-height: 60vh; padding-top: 8vh; padding-bottom: 8vh; }
+}
+
+/* Keyframes (if not already present) */
+@keyframes loaderBar {
+  0%   { transform: translateX(-60%); }
+  50%  { transform: translateX(0%); }
+  100% { transform: translateX(60%); }
+}
 
 /* Layout containers */
 .section{padding:72px 20px;max-width:var(--max-width);margin:0 auto}
