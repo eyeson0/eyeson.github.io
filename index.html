@@ -3,16 +3,56 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-<header class="site-header">
-  <nav class="nav-left"> … </nav>
+<header class="site-header" role="banner">
+  <nav class="nav-left" aria-label="Primary left navigation">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="new.html">New Arrivals</a></li>
+      <li class="has-dropdown">Upper Wear
+        <div class="dropdown">
+          <!-- dropdown links -->
+        </div>
+      </li>
+      <li class="has-dropdown">Lower Wear
+        <div class="dropdown">
+          <!-- dropdown links -->
+        </div>
+      </li>
+    </ul>
+  </nav>
 
-  <div class="logo-wrap">
-    <a href="index.html" class="logo-link">
-      <img src="images/eyeson-logo.png" alt="EYESON" class="logo" width="140" height="40">
+  <!-- Center logo: image preferred, text fallback shown only if image fails -->
+  <div class="logo-wrap" id="logoWrap" aria-hidden="false">
+    <a href="index.html" class="logo-link" aria-label="EYESON home">
+      <picture>
+        <source srcset="images/eyeson-logo.png" type="image/png">
+        <img
+          id="siteLogo"
+          src="images/eyeson-logo.png"
+          alt="EYESON"
+          class="logo"
+          width="140"
+          height="40"
+          loading="eager"
+        >
+      </picture>
+      <!-- visible only if image fails (screen-readers still see alt) -->
+      <span class="logo-text" id="logoText" aria-hidden="true">EYESON</span>
     </a>
   </div>
 
-  <nav class="nav-right"> … </nav>
+  <nav class="nav-right" aria-label="Primary right navigation">
+    <ul>
+      <li class="has-dropdown">EYESON Special
+        <div class="dropdown">
+          <!-- dropdown links -->
+        </div>
+      </li>
+      <li><a href="collections.html">Collections</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
 </header>
   <meta name="description" content="EYESON — Limitless luxury streetwear." />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
