@@ -2,7 +2,20 @@
 // Shared behaviors: preloader, cursor, header dropdowns, quick view base
 document.addEventListener('DOMContentLoaded', () => {
   // Preloader removal on window load handled in load event below
-  // Dropdown accessibility - show/hide on hover/focus
+  // Dropdown accessibility - show/hide on hover/focus// Optional: log when logo image fails and reveal fallback
+document.addEventListener('DOMContentLoaded', () => {
+  const logoImg = document.querySelector('.logo-link img');
+  const fallback = document.getElementById('logoFallback');
+  if (logoImg) {
+    logoImg.addEventListener('error', () => {
+      console.warn('Logo image failed to load:', logoImg.src);
+      if (fallback) fallback.style.display = 'block';
+    });
+  } else if (fallback) {
+    // If image element not found, show fallback (for debugging)
+    // fallback.style.display = 'block';
+  }
+});
   document.querySelectorAll('.has-dropdown').forEach(el => {
     el.addEventListener('mouseenter', () => {
       const dd = el.querySelector('.dropdown'); if (dd) dd.style.opacity = '1';
