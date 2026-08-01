@@ -51,11 +51,32 @@
       </ul>
     </nav>
 
-    <div class="logo-wrap" role="img" aria-label="EYESON logo">
-      <!-- Replace with your logo (Image 1) -->
-      <a href="index.html"><img src="images/eyeson-logo.png" alt="EYESON" class="logo" width="140" height="40"></a>
-    </div>
+    <!-- Header logo (replace your existing logo-wrap block with this) -->
+<div class="logo-wrap" aria-hidden="false">
+  <a href="index.html" class="logo-link" aria-label="EYESON home">
+    <picture>
+      <!-- you can remove the <source> for webp if you only have PNG -->
+      <source srcset="images/eyeson-logo.png" type="image/png">
+      <img
+        src="images/eyeson-logo.png"
+        alt="EYESON"
+        class="logo"
+        width="140"
+        height="40"
+        loading="eager"
+        onerror="this.dataset.failed='true'; this.style.display='none'; document.getElementById('logoFallback').style.display='block';"
+      >
+    </picture>
+  </a>
 
+  <!-- Inline SVG fallback (hidden by default) — will show if PNG fails -->
+  <a href="index.html" class="logo-link logo-fallback" id="logoFallback" style="display:none" aria-hidden="false">
+    <svg width="140" height="40" viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="EYESON">
+      <title>EYESON</title>
+      <text x="50%" y="62%" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-weight="700" font-size="48" fill="#ffffff">EYESON</text>
+    </svg>
+  </a>
+</div>
     <nav class="nav-right" aria-label="Primary right navigation">
       <ul>
         <li class="has-dropdown">EYESON Special
